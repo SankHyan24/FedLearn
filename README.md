@@ -17,6 +17,7 @@
 ### 稀疏更新算法：
 在分布式机器学习中会存在分布式随机梯度下降(Distributed SGD)，client从server处获取到parameters之后算出梯度，再将梯度数据传递给server。而稀疏更新就是说，client计算出权重的梯度矩阵，只将其绝对值大于一个设定值的一部分梯度数据传递给server，也就是传一个稀疏矩阵。但是把那些小的数据直接当成0会影响收敛，所以需要以下算法：
 ```python
+GradDrop.init=0
 def GradDrop(Delta:Gradient matrix,R:Dropping rate):
     # 初始化残差矩阵
     if GradDrop.init==0:
