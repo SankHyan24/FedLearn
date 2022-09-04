@@ -1,0 +1,6 @@
+Data/
+*__pycache__/
+tmp/
+*.pyc
+*.pt
+*.npy
