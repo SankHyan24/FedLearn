@@ -125,7 +125,6 @@ class FederatedScheme:
         # update the local model
         for param, dropped in zip(self.global_model.parameters(), Dropped):
             param.data = param.data + dropped
-            
         return local_model
 
     def fed_avg_one_step(self, n_clients: int, local_batch_size: int, n_local_batches: int, local_learning_rate: float):

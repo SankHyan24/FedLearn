@@ -4,3 +4,4 @@ tmp/
 *.pyc
 *.pt
 *.npy
+*.py.*
