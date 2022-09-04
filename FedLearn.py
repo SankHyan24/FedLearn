@@ -88,6 +88,64 @@ class FederatedScheme:
             param.data = param.data - dropped
         return local_model
 
+    def train_client_sparse(self, client_id: int, batch_size: int, n_batches: int, learning_rate: float):
+        local_model = self.create_model().to(self.device)
+        if client_id in self.residuals:
+            residuals = self.residuals[client_id]
+        else :
+<<<<<<< HEAD
+            residuals = [torch.zeros_like(param) for param in local_model.parameters()]
+=======
+            # residuals is a list of tensors
+            residuals = [torch.zeros_like(param) for param in local_model.parameters()]
+            self.residuals[client_id] = residuals
+
+>>>>>>> 1ba5c9718d4e3bc6492b636b58d1542a15c7940d
+        # Copy the global model
+        copy_model_params(self.global_model, local_model)
+        optimizer = SGD(local_model.parameters(), learning_rate)
+
+        # Train the local model
+        for i in range(n_batches):
+            batch_xs, batch_ys = self.clients[client_id].get_batch_xy(batch_size)
+            batch_xs = torch.from_numpy(batch_xs).to(self.device)
+            batch_ys = torch.from_numpy(batch_ys).to(self.device)
+            optimizer.zero_grad()
+            loss = self.loss_func(local_model(batch_xs), batch_ys)
+            # print(loss.item())
+            loss.backward()
+            optimizer.step()
+<<<<<<< HEAD
+        # sparse update
+        # Delta is a tensor of the minus of the gradients between the global model and the local model
+        Delta = [param.data - global_param.data for param, global_param in zip(local_model.parameters(), self.global_model.parameters())]            
+=======
+        
+        # sparse update
+        # Delta is a tensor of the minus of the gradients between the global model and the local model
+        Delta = [param.data - global_param.data for param, global_param in zip(local_model.parameters(), self.global_model.parameters())]            
+        # update Delta with the residual
+>>>>>>> 1ba5c9718d4e3bc6492b636b58d1542a15c7940d
+        Delta = [delta + residual for delta, residual in zip(Delta, residuals)]
+        Dropped = [torch.zeros_like(delta) for delta in Delta]
+        # calculate the threshold for each tensor
+        for i, delta in enumerate(Delta):
+            # threshold is the top k value of the absolute value of the tensor
+            indice=int(delta.numel() * self.dropping_rate)
+            threshold=torch.sort(torch.abs(delta.view(-1)))[0][indice]
+            # set the value of the tensor to Dropped if it is larger than the threshold
+            Dropped[i][torch.abs(delta) > threshold] = delta[torch.abs(delta) > threshold]
+        # update the residual
+<<<<<<< HEAD
+        self.residuals[client_id] = [delta - dropped for delta, dropped in zip(Delta, Dropped)]
+=======
+        residuals = [delta - dropped for delta, dropped in zip(Delta, Dropped)]
+>>>>>>> 1ba5c9718d4e3bc6492b636b58d1542a15c7940d
+        # update the local model
+        for param, dropped in zip(local_model.parameters(), Dropped):
+            param.data = param.data - dropped
+        return local_model
+
     def fed_avg_one_step(self, n_clients: int, local_batch_size: int, n_local_batches: int, local_learning_rate: float):
         client_indices = np.random.choice(len(self.clients), n_clients)
         local_paras = [[] for _ in self.global_model.parameters()]
