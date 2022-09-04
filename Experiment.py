@@ -29,12 +29,11 @@ n_client_batches = 10  # number of batches client trains in one round
 
 
 
-fed_scheme = FederatedScheme(clients, lambda: model(), nn.MSELoss())
+fed_scheme = FederatedScheme(clients, lambda: model(), nn.MSELoss(),drop_rate=0.2)
 
 # Train for 1000 global iterations
 for i in range(1000):
     # Calculate the accuracy on the test set of the global model every 100 iterations
-    print(f"iteration: {i:4d}")
     if i % 100 == 0:
         test_xs_np, test_ys_np = mnist_test.get_batch_xy(1000)
         test_xs = torch.from_numpy(test_xs_np).to(fed_scheme.device)
