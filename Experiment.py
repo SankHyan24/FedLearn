@@ -29,7 +29,7 @@ n_client_batches = 10  # number of batches client trains in one round
 
 
 
-fed_scheme = FederatedScheme(clients, lambda: model(), nn.MSELoss(),drop_rate=0.2)
+fed_scheme = FederatedScheme(clients, lambda: model(), nn.MSELoss(),drop_rate=0.01)
 
 # Train for 1000 global iterations
 for i in range(1000):
