@@ -4,7 +4,7 @@ import torch.nn as nn
 from FedLearn import FederatedScheme
 from Data.Datasets import get_mnist_test
 from Examples.MNIST.Model import MNIST_CNN, MNIST_2NN
-from GenClients import get_iid_mnist, get_non_iid_mnist
+from Examples.MNIST.GenClients import get_iid_mnist, get_non_iid_mnist
 
 mnist_test = get_mnist_test()
 
