@@ -93,14 +93,7 @@ class FederatedScheme:
         if client_id in self.residuals:
             residuals = self.residuals[client_id]
         else :
-<<<<<<< HEAD
             residuals = [torch.zeros_like(param) for param in local_model.parameters()]
-=======
-            # residuals is a list of tensors
-            residuals = [torch.zeros_like(param) for param in local_model.parameters()]
-            self.residuals[client_id] = residuals
-
->>>>>>> 1ba5c9718d4e3bc6492b636b58d1542a15c7940d
         # Copy the global model
         copy_model_params(self.global_model, local_model)
         optimizer = SGD(local_model.parameters(), learning_rate)
@@ -115,17 +108,9 @@ class FederatedScheme:
             # print(loss.item())
             loss.backward()
             optimizer.step()
-<<<<<<< HEAD
         # sparse update
         # Delta is a tensor of the minus of the gradients between the global model and the local model
         Delta = [param.data - global_param.data for param, global_param in zip(local_model.parameters(), self.global_model.parameters())]            
-=======
-        
-        # sparse update
-        # Delta is a tensor of the minus of the gradients between the global model and the local model
-        Delta = [param.data - global_param.data for param, global_param in zip(local_model.parameters(), self.global_model.parameters())]            
-        # update Delta with the residual
->>>>>>> 1ba5c9718d4e3bc6492b636b58d1542a15c7940d
         Delta = [delta + residual for delta, residual in zip(Delta, residuals)]
         Dropped = [torch.zeros_like(delta) for delta in Delta]
         # calculate the threshold for each tensor
@@ -136,11 +121,7 @@ class FederatedScheme:
             # set the value of the tensor to Dropped if it is larger than the threshold
             Dropped[i][torch.abs(delta) > threshold] = delta[torch.abs(delta) > threshold]
         # update the residual
-<<<<<<< HEAD
         self.residuals[client_id] = [delta - dropped for delta, dropped in zip(Delta, Dropped)]
-=======
-        residuals = [delta - dropped for delta, dropped in zip(Delta, Dropped)]
->>>>>>> 1ba5c9718d4e3bc6492b636b58d1542a15c7940d
         # update the local model
         for param, dropped in zip(local_model.parameters(), Dropped):
             param.data = param.data - dropped
