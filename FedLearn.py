@@ -15,7 +15,7 @@ class FederatedScheme:
         self.global_model = create_model().to(device)
         self.loss_func = loss_func
         self.device = device
-
+        print("device",self.device)
         # The communication rounds
         self.comm_rounds = 0
         self.comm_size = 0
