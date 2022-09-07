@@ -3,9 +3,15 @@ import torch
 import torch.nn as nn
 
 
-def copy_model_params(model_from: nn.Module, model_to: nn.Module):
+def copy_model_params(model_from: nn.Module, model_to: nn.Module,layer=0):
     for w_from, w_to in zip(model_from.parameters(), model_to.parameters()):
         w_to.data = torch.clone(w_from.data)
+
+def copy_model_first_k_layers_params(model_from: nn.Module, model_to: nn.Module,k=0):
+    for w_from, w_to in zip(model_from.parameters(), model_to.parameters()):
+        if k>0:
+            w_to.data = torch.clone(w_from.data)
+            k=k-1
 
 
 class BasicDataset:

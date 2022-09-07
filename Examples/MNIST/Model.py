@@ -42,3 +42,19 @@ class MNIST_CNN(nn.Module):
         x5 = torch.relu(self.linear1(torch.flatten(x4, 1)))
         y = self.linear2(x5)
         return y
+
+
+class MNIST_3NN(nn.Module):
+    def __init__(self):
+        super(MNIST_3NN, self).__init__()
+        self.linear1 = nn.Linear(784, 200)
+        self.linear2 = nn.Linear(200, 200)
+        self.linear3 = nn.Linear(200, 200)
+        self.linear4 = nn.Linear(200, 10)
+
+    def forward(self, x):
+        x1 = torch.relu(self.linear1(x))
+        x2 = torch.relu(self.linear2(x1))
+        x3 = torch.relu(self.linear3(x2))
+        y = self.linear4(x3)
+        return y   
