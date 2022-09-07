@@ -18,6 +18,8 @@ class MNIST_Dataset(BasicDataset):
         ys = batch_data[:, 0].astype(int)
         ys = np.eye(10, dtype=np.float32)[ys]
         xs = batch_data[:, 1:]
+        # 如果用CNN。加上这一句：
+        xs=np.reshape(xs,(batch_size,1,28,28))
         return (xs - 128) / 128, ys
 
 

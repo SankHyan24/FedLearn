@@ -20,7 +20,7 @@ clients = get_iid_mnist(500)
 # clients = get_non_iid_mnist(2, 250)  
 
 
-model = MNIST_3NN
+model = MNIST_CNN
 
 
 n_clients = 10  # number of clients picked for each FedAvg round
@@ -48,20 +48,20 @@ for i in range(1000):
     fed_scheme.fed_avg_one_step(n_clients, client_batch_size, n_client_batches, 0.0005)
 
 
-# fed per algorithm
-print("use fed per algorithm")
-for i in tqdm.tqdm(range(1000)):
-    if i % 100 ==0 and i!=0:
-        test_xs_np, test_ys_np = mnist_test.get_batch_xy(1000)
-        test_xs = torch.from_numpy(test_xs_np).to(fed_scheme.device)
-        test_ys = torch.from_numpy(test_ys_np).to(fed_scheme.device)
-        # test all the model in the client_models
-        acc=0
-        for model in fed_scheme.client_models.values():
-            pred_ys = model(test_xs).detach().cpu().numpy()
-            acc += np.mean(np.argmax(pred_ys, axis=-1) == np.argmax(test_ys_np, axis=-1))
-        print(f"Global round {i:6d}, test accuracy {acc/len(fed_scheme.client_models):.3f}")
+# # fed per algorithm
+# print("use fed per algorithm")
+# for i in tqdm.tqdm(range(1000)):
+#     if i % 100 ==0 and i!=0:
+#         test_xs_np, test_ys_np = mnist_test.get_batch_xy(1000)
+#         test_xs = torch.from_numpy(test_xs_np).to(fed_scheme.device)
+#         test_ys = torch.from_numpy(test_ys_np).to(fed_scheme.device)
+#         # test all the model in the client_models
+#         acc=0
+#         for model in fed_scheme.client_models.values():
+#             pred_ys = model(test_xs).detach().cpu().numpy()
+#             acc += np.mean(np.argmax(pred_ys, axis=-1) == np.argmax(test_ys_np, axis=-1))
+#         print(f"Global round {i:6d}, test accuracy {acc/len(fed_scheme.client_models):.3f}")
 
 
-    # The learning rate should not be too large, otherwise the loss will explode
-    fed_scheme.fed_per_one_step(100, client_batch_size, n_client_batches, 0.0005)
+#     # The learning rate should not be too large, otherwise the loss will explode
+#     fed_scheme.fed_per_one_step(100, client_batch_size, n_client_batches, 0.0005)
