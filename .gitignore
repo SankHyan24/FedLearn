@@ -5,3 +5,4 @@ tmp/
 *.pt
 *.npy
 *.py.*
+*.pdf
