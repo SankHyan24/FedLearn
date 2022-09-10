@@ -26,7 +26,7 @@ class FederatedScheme:
 
         # use to implement fed-per algorithm
         self.kp=1
-        self.total=4
+        self.total=4 if create_model.__name__ == '3NN' else 3
         self.client_models= {}
 
     def add_client_dateset(self, data: np.ndarray):
