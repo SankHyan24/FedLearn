@@ -50,7 +50,7 @@ def get_non_iid_mnist(classes_per_client: int, samples_per_class: int):
         clients_classes.append(client_classes)
     return clients,clients_classes
 
-
+# 生成非iid测试数据集
 def get_non_iid_mnist_test(classes: list, samples_per_class: int):
     """
     Get non-identically distributed mnist dataset

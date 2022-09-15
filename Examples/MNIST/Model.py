@@ -44,6 +44,8 @@ class MNIST_CNN(nn.Module):
         return y
 
 
+# 2NN的升级版，因为我怕对于FedPer2NN太简单了，所以加了一层
+# 但实际上2NN应用到FedPer上效果也不错
 class MNIST_3NN(nn.Module):
     def __init__(self):
         super(MNIST_3NN, self).__init__()
@@ -57,4 +59,4 @@ class MNIST_3NN(nn.Module):
         x2 = torch.relu(self.linear2(x1))
         x3 = torch.relu(self.linear3(x2))
         y = self.linear4(x3)
-        return y   
+        return y
